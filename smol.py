@@ -1,10 +1,9 @@
 import os
 import shutil
-import subprocess
 
 from smolagents import CodeAgent, DuckDuckGoSearchTool, Tool, HfApiModel
 from dotenv import load_dotenv, dotenv_values 
-from tool import FindFilesTool
+from tool import FindFilesTool, GitPushTool
 
 load_dotenv() 
 
@@ -40,35 +39,8 @@ if os.path.exists(image_path):
     shutil.copy(image_path, image_filename)
 
     print(f"Image saved to {image_filename}")
-    try:
-        gitUsername = os.getenv("GIT_USERNAME")
-        gitEmail = os.getenv("GIT_EMAIL")
-        # Step 1: Ensure we are in a Git repository
-        subprocess.run(["git", "status"], check=True)
-
-        # Step 2: Create and switch to a new branch
-        new_branch = "add-generated-image-2"
-        subprocess.run(["git", "checkout", "-b", new_branch], check=True)
-        print(f"Checked out to new branch: {new_branch}")
-
-        # Step 3: Add the changes
-        subprocess.run(["git", "add", "*"], check=True)
-        print("Changes added to staging.")
-        # Step 4: Add credentials
-        subprocess.run(["git", "config", "--global", "user.email", gitEmail], check=True)
-        print("Updated git email.")
-        subprocess.run(["git", "config", "--global", "user.name", gitUsername], check=True)
-        print("Updated git user name.")
-
-        # Step 5: Commit the changes
-        commit_message = "Add generated image to repository"
-        subprocess.run(["git", "commit", "-m", commit_message], check=True)
-        print("Changes committed.")
-
-        #Step 6: Push the branch to the remote repository
-        subprocess.run(["git", "push", "--set-upstream", "origin", new_branch], check=True)
-        print(f"Branch '{new_branch}' pushed to remote repository.")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred while performing Git operations: {e}")
+    update_git_tool = GitPushTool()
+    agent = CodeAgent(tools=[update_git_tool], model=model)
+    agent.run("commit to new branch and push to repo", additional_args={'branch_name': 'git-push-tool'})
 else:
     print("Failed to generate an image or the file does not exist.")
