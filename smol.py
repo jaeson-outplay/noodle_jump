@@ -41,6 +41,6 @@ if os.path.exists(image_path):
     print(f"Image saved to {image_filename}")
     update_git_tool = GitPushTool()
     agent = CodeAgent(tools=[update_git_tool], model=model)
-    agent.run("commit to new branch and push to repo", additional_args={'branch_name': 'git-push-tool'})
+    agent.run("commit to new branch and push to repo", additional_args={'branch_name': 'git-push-tool-1'})
 else:
     print("Failed to generate an image or the file does not exist.")
