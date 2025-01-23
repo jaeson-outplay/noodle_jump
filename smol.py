@@ -37,13 +37,10 @@ file_replace_tool = FileUpdateTool()
 agent = CodeAgent(tools=[find_files_tool, image_generation_tool, file_replace_tool], model=model)
 # agent = CodeAgent(tools=[DuckDuckGoSearchTool()], model=HfApiModel())
 # Step 1: Prompt reception
-response = agent.run("find me the webp file that is used to display trees in the level prop and replace it with a generated webp file of another retro bubbly style tree")
+response = agent.run("find me the webp file that is used to display trees in the level prop and replace it with a generated webp file of another dystopian style tree")
 print(f"found asset: {response}")
 # Run the agent to generate an image based on a prompt
-
-# Assuming the response contains a URL to the generated image
-image_path = os.path.normpath(response)
 # Check if the image path exists
 update_git_tool = GitPushTool()
 agent = CodeAgent(tools=[update_git_tool], model=model)
-agent.run("commit to new branch and push to repo", additional_args={'branch_name': 'image-replace-tool'})
+agent.run("commit to new branch and push to repo", additional_args={'branch_name': 'image-replace-tool-1'})
