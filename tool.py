@@ -1,5 +1,36 @@
 from smolagents import Tool
 
+class FileUpdateTool(Tool):
+    name = "file_update_tool"
+    description ="""
+    this tool will be used to update the file in a given directory with the provided new file directory.
+    """
+    inputs = {
+        "target_file_location": {
+            "type": "string",
+            "description": "the location of the file that will be replaced"
+        },
+        "new_file_location": {
+            "type": "string",
+            "description": "the location of the new file to replace target file location"
+        }
+    }
+    output_type = "string"
+    def forward(self, target_file_location, new_file_location) -> str:
+        import os
+        import shutil
+
+        if os.path.exists(new_file_location):
+            # Define the destination path for the saved image
+        #     # Create the './generatedImages' directory if it doesn't exist
+        #     # Copy the image from the temporary location to the desired directory
+            shutil.copy(new_file_location, target_file_location)
+
+            return print(f"Image saved to {target_file_location}")
+        else:
+            return print("Failed to generate an image or the file does not exist.")
+        
+
 class GitPushTool(Tool):
     name = "git_push_tool"
     description = """
@@ -83,6 +114,7 @@ class FindFilesTool(Tool):
             for filename in filenames:
                 if filename.endswith(extension):
                     filepath = os.path.join(dirpath, filename)
-                    found_files.append(filepath)
+                    absolute_path = os.path.abspath(filepath)
+                    found_files.append(absolute_path)
 
         return found_files
