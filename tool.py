@@ -30,6 +30,39 @@ class FileUpdateTool(Tool):
         else:
             return print("Failed to generate an image or the file does not exist.")
         
+class ProcessFlowIdentifierTool(Tool):
+    name = "process_flow_identifier_tool"
+    description = """
+    This tool will be used to give a set of instructions depending on the purpose of the prompt. This is to aid the LLM in its decision making process.
+    """
+    inputs = {
+        "prompt_objective": {
+            "type": "string",
+            "description": "This is the objective of the user's original prompt to help identify the steps needed for the llm to take."
+        }
+    }
+    output_type = "string"
+    def forward(self, prompt_objective) -> str:
+        match prompt_objective:
+            case "asset_change":
+                instructions = """
+                1. Find the webp file assosciated with prompt.
+                2. Copy original asset's resolution.
+                3. Generate image according to prompt with the same resolution as the original asset.
+                4. Download the image and replace the original.
+                """
+                return instructions
+            case "script_change":
+                instructions = """
+                none yet
+                """
+                return instructions
+            case _:
+                instructions = """
+                inform user that the instructions where unclear
+                """
+                return instructions
+        
 
 class GitPushTool(Tool):
     name = "git_push_tool"
