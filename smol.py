@@ -52,4 +52,4 @@ print(f"found asset: {response}")
 # # Check if the image path exists
 update_git_tool = GitPushTool()
 agent = CodeAgent(tools=[update_git_tool], model=model)
-agent.run("commit to new branch and push to repo", additional_args={'branch_name': 'image-replace-tool-4'})
+agent.run("commit to new branch and push to repo", additional_args={'branch_name': 'image-replace-tool-5'})
