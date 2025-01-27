@@ -30,6 +30,26 @@ class FileUpdateTool(Tool):
         else:
             return print("Failed to generate an image or the file does not exist.")
         
+class GetImageDimensionsTool(Tool):
+    name = "get_image_dimensions_tool"
+    description= """
+    This tool is used to get the width and height of a webp file.
+    """
+    inputs = {
+        "file_location": {
+            "type": "string",
+            "description": "The location in which the webp file can be located"
+        }
+    }
+    output_type = "object"
+    def forward(self, file_location) -> dict:
+        from PIL import Image
+
+        with Image.open(file_location) as img:
+            width, height = img.size
+
+        return {"width": width, "height": height}
+
 class ProcessFlowIdentifierTool(Tool):
     name = "process_flow_identifier_tool"
     description = """
@@ -47,9 +67,9 @@ class ProcessFlowIdentifierTool(Tool):
             case "asset_change":
                 instructions = """
                 1. Find the webp file assosciated with prompt.
-                2. Copy original asset's resolution.
-                3. Generate image according to prompt with the same resolution as the original asset.
-                4. Download the image and replace the original.
+                2. Copy original asset's dimensions using the get_image_dimensions_tool(file_location).
+                3. Generate the image using the image_generation_tool(prompt,width,height) and add the width and height as parameters that follows the original file (example: image_generation_tool(prompt"", width=32px, height=32px)).
+                4. Download the image and replace the original using the FileUpdateTool tool.
                 """
                 return instructions
             case "script_change":
