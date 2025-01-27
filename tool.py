@@ -78,18 +78,6 @@ class GitPushTool(Tool):
         except subprocess.CalledProcessError as e:
             return print(f"An error occurred while performing Git operations: {e}")
 
-# class ReplaceImageTool(Tool):
-#     name ="image_replacer_tool"
-#     description ="""
-#     This tool will be used to take two inputs, an existing image and a prompt. An image will be generated based on the prompt 
-#     and will be styled to be similar to the provided image.
-#     """
-#     inputs = {}
-
-#     output_type = "string"
-#     def forward(self, file) -> str:
-#         return 
-
 class FindFilesTool(Tool):
     name = "find_files"
     description = "Find files with a given extension in a directory and its subdirectories"
